@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Academy - 관리자 로그인</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #5a6fd8;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            color: #667eea;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1 class="login-title">관리자 로그인</h1>
+            <p class="login-subtitle">AI Academy 관리자 페이지</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="password">관리자 비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <button type="submit" class="login-btn">로그인</button>
+            <div class="error-message" id="errorMessage">비밀번호가 올바르지 않습니다.</div>
+            <div class="loading" id="loading">로그인 중...</div>
+        </form>
+
+        <a href="index.html" class="back-link">메인으로 돌아가기</a>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const loading = document.getElementById('loading');
+            const loginBtn = document.querySelector('.login-btn');
+            
+            // 로딩 상태 표시
+            loading.style.display = 'block';
+            loginBtn.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // 비밀번호 검증 (000000)
+            setTimeout(() => {
+                if (password === '000000') {
+                    // 로그인 성공 - 세션 스토리지에 로그인 상태 저장
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    
+                    // 관리자 대시보드로 이동
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    // 로그인 실패
+                    errorMessage.style.display = 'block';
+                    loading.style.display = 'none';
+                    loginBtn.style.display = 'block';
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
+                }
+            }, 1000); // 1초 지연으로 로딩 효과
+        });
+
+        // Enter 키로 로그인
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html> 
